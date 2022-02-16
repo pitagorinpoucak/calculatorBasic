@@ -13,25 +13,49 @@
       <div id="display"></div>
       <div id="buttons">
         <div id="numpad">
-          <div id="num1" class="number" value="1">1</div>
-          <div id="num2" class="number" value="2">2</div>
-          <div id="num3" class="number" value="3">3</div>
-          <div id="num4" class="number" value="4">4</div>
-          <div id="num5" class="number" value="5">5</div>
-          <div id="num6" class="number" value="6">6</div>
-          <div id="num7" class="number" value="7">7</div>
-          <div id="num8" class="number" value="8">8</div>
-          <div id="num9" class="number" value="9">9</div>
-          <div id="num0" class="number" value="0">0</div>
+          <div id="num1" class="number" onclick="numberClicked(event)">1</div>
+          <div id="num2" class="number" onclick="numberClicked(event)">2</div>
+          <div id="num3" class="number" onclick="numberClicked(event)">3</div>
+          <div id="num4" class="number" onclick="numberClicked(event)">4</div>
+          <div id="num5" class="number" onclick="numberClicked(event)">5</div>
+          <div id="num6" class="number" onclick="numberClicked(event)">6</div>
+          <div id="num7" class="number" onclick="numberClicked(event)">7</div>
+          <div id="num8" class="number" onclick="numberClicked(event)">8</div>
+          <div id="num9" class="number" onclick="numberClicked(event)">9</div>
+          <div id="num0" class="number" onclick="numberClicked(event)">0</div>
         </div>
         <div id="operations">
-          <div id="add" class="operator">+</div>
-          <div id="subtract" class="operator">-</div>
-          <div id="multiply" class="operator">*</div>
-          <div id="divide" class="operator">/</div>
-          <div id="changePrefix" class="operator">+/-</div>
-          <div id="addDecimal" class="operator">.</div>
-          <div id="equals" class="operator">=</div>
+          <div id="add" class="operator" onclick="operatorClicked(event)">
+            +
+          </div>
+          <div id="subtract" class="operator" onclick="operatorClicked(event)">
+            -
+          </div>
+          <div id="multiply" class="operator" onclick="operatorClicked(event)">
+            *
+          </div>
+          <div id="divide" class="operator" onclick="operatorClicked(event)">
+            /
+          </div>
+          <div
+            id="changePrefix"
+            class="operator"
+            onclick="operatorClicked(event)"
+          >
+            +/-
+          </div>
+          <div
+            id="addDecimal"
+            class="operator"
+            onclick="operatorClicked(event)"
+          >
+            .
+          </div>
+          <div id="equals" class="operator" onclick="equalsClicked()">=</div>
+          <div id="backspace" class="operator" onclick="operatorClicked(event)">
+            <-
+          </div>
+          <div id="clear" class="operator" onclick="allClear()">AC</div>
         </div>
       </div>
     </div>
