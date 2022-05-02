@@ -1,0 +1,7 @@
+* {
+    border: 2px solid black
+}
+
+.display {
+    min-height: 20px;
+}
