@@ -44,6 +44,7 @@ function operatorPressed(operation) {
     case "=":
       console.log("equals");
       break;
-      
   }
 }
+
+
