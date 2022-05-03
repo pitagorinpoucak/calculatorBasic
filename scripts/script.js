@@ -4,12 +4,21 @@ const history = document.querySelector(".history");
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
 
+let operationList = [];
+
 for (let i = 0; i < numbers.length; i++) {
   numbers[i].addEventListener(
     "click",
-    (e) => (display.textContent += e.target.textContent)
-  );
-}
+    (e) => {
+      let displayContent = display.textContent;
+      if (displayContent.length < 12) {
+      display.textContent += e.target.textContent;}
+      else {
+        display.textContent = displayContent.slice(1);
+        display.textContent += e.target.textContent;
+      }
+    }
+  )}
 
 for (let i = 0; i < operators.length; i++) {
   operators[i].addEventListener("click", (e) =>
@@ -17,29 +26,32 @@ for (let i = 0; i < operators.length; i++) {
   );
 }
 
+/* koristiti zadnje elemente u operationList arrayu za izračun operacije, voditi računa o nuli kod dijeljenja i baciti eror po potrebi, srediti da to ne blokira cijeli program
+- ako se ide ubacivati novi broj nakon pritisnutog = onda sve počistiti ko da se ide ispočetka
+dodati = u history display po potrebi da bi se objasni izračun
+
+- opcionalno - omogućiti klik na history da se vidi cijeli proces ako je više operacija u lancu
+- osposobiti decimalnu točku - obavezno koristiti flag za deaktivirati posli prve točke
+
+- porediti malo kod da liči u nešto
+- skužiti zašto prettier ne rodi!!*/
+
 function operatorPressed(operation) {
-  console.log(operation);
   switch (operation) {
     case "+":
-      console.log("add");
-      break;
     case "-":
-      console.log("subtract");
-      break;
     case "*":
-      console.log("multiply");
-      break;
     case "/":
-      console.log("divide");
+      operate(operation);
       break;
     case ".":
       console.log("dot");
       break;
     case "<-":
-      console.log("backspace");
+      backspace();
       break;
     case "AC":
-      console.log("all clear");
+      allClear();
       break;
     case "=":
       console.log("equals");
@@ -48,3 +60,27 @@ function operatorPressed(operation) {
 }
 
 
+function backspace (){
+  let content = display.textContent;
+  display.textContent=content.slice(0, (content.length-1));
+}
+
+function operate (operation) {
+  operationList.push(display.textContent);
+  operationList.push(operation);
+  
+  display.textContent='';
+  
+  if (operationList.join('').length >= 16) {
+    history.textContent = '...' + operationList.join('').slice(-16);
+  } else {
+    history.textContent=operationList.join('');
+  }
+}
+
+function allClear(){
+  display.textContent='';
+  history.textContent='';
+ operationList=[];
+ console.log(operationList); 
+}
