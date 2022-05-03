@@ -12,7 +12,7 @@ display shadow: #2d3e50
 */
 
 * {
-    border: 2px solid black;
+/*    border: 2px solid black;*/
     box-sizing: border-box;
 }
 body{
@@ -27,7 +27,7 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 2rem;
+    padding: 0.5rem;
     
     max-width: 35%;
     min-width: fit-content;
@@ -35,34 +35,63 @@ body{
     min-height: fit-content;
 
     background-color: #95a5a5;
-    border-radius: 5rem;
+    border-radius: 3rem;
     margin: 5rem 0 5rem 0;
+
+    box-shadow:0 1.3rem #7e8c8d;
 }
 
 
-.history {min-height: 5rem;}
+.history, .display {
+    min-height: 5rem;
+    background-color:#34495e;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    
+    font-size: 1.6rem;
+    font-family: 'Courier New', Courier, monospace;
+    color: #ecf0f1;
+    font-weight: 600;
+    padding: 1.5rem;
+    text-shadow: 0.1rem 0.4rem #2d3e50;
+}
+
+.history {
+    border-top-left-radius: 2rem;
+    border-top-right-radius: 2rem;
+    margin: 1rem 1rem 0 1rem;
+    box-shadow: 0 1.3rem #2d3e50 inset;
+    padding-bottom: 0;
+}
 
 .display {
-    min-height: 5rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    margin: 0 1rem 0 1rem;
+    font-size: 2.5rem;
+    padding-top: 0;
 }
+
+
 
 
 
 .buttons {
-    padding: 2rem;
+    padding: 1rem;
     display: flex;
     justify-content: center;
 }
 
 .numbers {
-    padding: 2rem;
+    padding: 1rem;
     display: grid;
     grid-template-columns: repeat(3, 30%);
     gap: 1rem;
 }
 
 .operators {
-    padding: 2rem;
+    padding: 1rem;
     display: grid;
     grid-template-columns: repeat(2, 50%);
     gap: 1rem;
@@ -70,7 +99,34 @@ body{
 
 .number, .operator {
 
-width: 4rem;
-height: 4rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius:1rem;
+    background-color: #ecf0f1;
+    box-shadow:0 0.5rem #7e8c8d;
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    color: #2d3e50;
+
+}
+
+.number:hover, .operator:hover {
+    background-color: #dde1e2;
+
+}
+
+.number:active, .operator:active {
+    transform: translateY(0.3rem);
+    box-shadow: 0  0.2rem #474c4d;;
+}
+
+.equals {
+    width: auto;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    font-size: xx-large;
+    font-weight: 900;
+    color: #e94c3d;
 
 }
