@@ -7,18 +7,16 @@ const operators = document.querySelectorAll(".operator");
 let operationList = [];
 
 for (let i = 0; i < numbers.length; i++) {
-  numbers[i].addEventListener(
-    "click",
-    (e) => {
-      let displayContent = display.textContent;
-      if (displayContent.length < 12) {
-      display.textContent += e.target.textContent;}
-      else {
-        display.textContent = displayContent.slice(1);
-        display.textContent += e.target.textContent;
-      }
+  numbers[i].addEventListener("click", (e) => {
+    let displayContent = display.textContent;
+    if (displayContent.length < 12) {
+      display.textContent += e.target.textContent;
+    } else {
+      display.textContent = displayContent.slice(1);
+      display.textContent += e.target.textContent;
     }
-  )}
+  });
+}
 
 for (let i = 0; i < operators.length; i++) {
   operators[i].addEventListener("click", (e) =>
@@ -45,7 +43,7 @@ function operatorPressed(operation) {
       operate(operation);
       break;
     case ".":
-      console.log("dot");
+      //console.log("dot");
       break;
     case "<-":
       backspace();
@@ -54,33 +52,42 @@ function operatorPressed(operation) {
       allClear();
       break;
     case "=":
-      console.log("equals");
+      //console.log("equals");
       break;
   }
 }
 
-
-function backspace (){
+function backspace() {
   let content = display.textContent;
-  display.textContent=content.slice(0, (content.length-1));
+  display.textContent = content.slice(0, content.length - 1);
 }
 
-function operate (operation) {
-  operationList.push(display.textContent);
-  operationList.push(operation);
-  
-  display.textContent='';
-  
-  if (operationList.join('').length >= 16) {
-    history.textContent = '...' + operationList.join('').slice(-16);
+function operate(operation) {
+  if (display.textContent != "") {
+    operationList.push(display.textContent);
+  }
+  if (isNumber(operationList[operationList.length - 1])) {
+    operationList.push(operation);
+    display.textContent = "";
   } else {
-    history.textContent=operationList.join('');
+    operationList.pop();
+    operationList.push(operation);
+  }
+
+  if (operationList.join("").length >= 16) {
+    history.textContent = "..." + operationList.join("").slice(-16);
+  } else {
+    history.textContent = operationList.join("");
   }
 }
 
-function allClear(){
-  display.textContent='';
-  history.textContent='';
- operationList=[];
- console.log(operationList); 
+function allClear() {
+  display.textContent = "";
+  history.textContent = "";
+  operationList = [];
+  //console.log(operationList);
+}
+
+function isNumber(item) {
+  return !(item == "+" || item == "-" || item == "*" || item == "/");
 }
