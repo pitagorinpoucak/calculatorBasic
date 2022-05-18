@@ -31,8 +31,7 @@ dodati = u history display po potrebi da bi se objasni izračun
 - opcionalno - omogućiti klik na history da se vidi cijeli proces ako je više operacija u lancu
 - osposobiti decimalnu točku - obavezno koristiti flag za deaktivirati posli prve točke
 
-- porediti malo kod da liči u nešto
-- skužiti zašto prettier ne rodi!!*/
+- porediti malo kod da liči u nešto*/
 
 function operatorPressed(operation) {
   switch (operation) {
