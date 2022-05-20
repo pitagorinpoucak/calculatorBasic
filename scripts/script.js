@@ -6,9 +6,16 @@ const operators = document.querySelectorAll(".operator");
 
 let operationList = [];
 
+let operatorPressedFLAG = false;
+
 for (let i = 0; i < numbers.length; i++) {
   numbers[i].addEventListener("click", (e) => {
+    if (operatorPressedFLAG) {
+      display.textContent = "";
+      operatorPressedFLAG = false;
+    }
     let displayContent = display.textContent;
+
     if (displayContent.length < 12) {
       display.textContent += e.target.textContent;
     } else {
@@ -34,6 +41,7 @@ dodati = u history display po potrebi da bi se objasni izračun
 - porediti malo kod da liči u nešto*/
 
 function operatorPressed(operation) {
+  operatorPressedFLAG = true;
   switch (operation) {
     case "+":
     case "-":
@@ -77,6 +85,47 @@ function operate(operation) {
     history.textContent = "..." + operationList.join("").slice(-16);
   } else {
     history.textContent = operationList.join("");
+  }
+  let num1 = Number(operationList[operationList.length - 2]);
+  let num2 = 0;
+  if (operationList.length > 3) {
+    num2 = Number(operationList[operationList.length - 4]);
+  }
+  console.log(num1, num2);
+
+  switch (operation) {
+    case "+":
+      display.textContent = add(num1, num2);
+      console.log(add(num1, num2));
+      break;
+    case "-":
+      display.textContent = subtract(num1, num2);
+      break;
+    case "*":
+      display.textContent = multiply(num1, num2);
+      break;
+    case "/":
+      display.textContent = divide(num1, num2);
+      break;
+  }
+}
+
+function add(n1, n2) {
+  return n1 + n2;
+}
+
+function subtract(n1, n2) {
+  return n1 - n2;
+}
+
+function multiply(n1, n2) {
+  return n1 * n2;
+}
+function divide(n1, n2) {
+  if (n2 === 0) {
+    return "error";
+  } else {
+    return n1 / n2;
   }
 }
 
