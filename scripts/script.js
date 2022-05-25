@@ -8,6 +8,14 @@ let operationList = [];
 
 let operatorPressedFLAG = false;
 
+window.addEventListener("keypress", (e) => {
+  if (e.code.includes("Digit") || e.code.includes("Numpad")) {
+    console.log(e.key);
+  } else {
+    console.log(e);
+  }
+});
+
 for (let i = 0; i < numbers.length; i++) {
   numbers[i].addEventListener("click", (e) => {
     if (operatorPressedFLAG) {
