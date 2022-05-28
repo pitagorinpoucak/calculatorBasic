@@ -6,17 +6,77 @@ const operators = document.querySelectorAll(".operator");
 
 let operationList = [];
 
+const numberArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const operatorArray = [
+  "+",
+  "-",
+  "*",
+  "/",
+  ".",
+  ",",
+  "C",
+  "c",
+  "=",
+  "Enter",
+  "Backspace",
+];
+
 let operatorPressedFLAG = false;
 
-window.addEventListener("keypress", (e) => {
-  if (e.code.includes("Digit") || e.code.includes("Numpad")) {
-    console.log(e.key);
-  } else {
-    console.log(e);
+window.addEventListener("keydown", (e) => {
+  if (operatorPressedFLAG) {
+    display.textContent = "";
+    operatorPressedFLAG = false;
+  }
+  if (numberArray.includes(Number(e.key))) {
+    display.textContent += e.key;
+  }
+
+  if (operatorArray.includes(e.key)) {
+    operatorPressedFLAG = true;
+    operatorPress(e.key);
   }
 });
 
-for (let i = 0; i < numbers.length; i++) {
+function operatorPress(operation) {}
+
+function operate(operation) {
+  console.log(operation);
+  switch (operation) {
+    case "+":
+      break;
+    case "-":
+      break;
+    case "*":
+      break;
+    case "/":
+      break;
+
+    case "=":
+    case "Enter":
+      break;
+
+    case "c":
+    case "C":
+      break;
+
+    case "AC":
+      break;
+
+    case "+/-":
+      break;
+
+    case "<-":
+    case "Backspace":
+      break;
+
+    case ".":
+    case ",":
+      break;
+  }
+}
+
+/*for (let i = 0; i < numbers.length; i++) {
   numbers[i].addEventListener("click", (e) => {
     if (operatorPressedFLAG) {
       display.textContent = "";
@@ -46,7 +106,7 @@ dodati = u history display po potrebi da bi se objasni izračun
 - opcionalno - omogućiti klik na history da se vidi cijeli proces ako je više operacija u lancu
 - osposobiti decimalnu točku - obavezno koristiti flag za deaktivirati posli prve točke
 
-- porediti malo kod da liči u nešto*/
+- porediti malo kod da liči u nešto
 
 function operatorPressed(operation) {
   operatorPressedFLAG = true;
@@ -148,3 +208,4 @@ function allClear() {
 function isNumber(item) {
   return !(item == "+" || item == "-" || item == "*" || item == "/");
 }
+*/
