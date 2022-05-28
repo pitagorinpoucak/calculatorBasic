@@ -141,6 +141,7 @@ function allClear() {
   display.textContent = "";
   history.textContent = "";
   operationList = [];
+  console.clear();
   //console.log(operationList);
 }
 
