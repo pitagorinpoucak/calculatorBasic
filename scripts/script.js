@@ -26,6 +26,10 @@ function keyPress(key) {
   }
 
   if (operatorArray.includes(key)) {
+    if (operatorOne !== null && operatorTwo !== null && operation !== "") {
+      enterPressed();
+      operatorOne = Number(display.textContent);
+    }
     if (operatorOne === null) {
       operatorOne = Number(display.textContent);
       operation = key;
@@ -47,6 +51,9 @@ function keyPress(key) {
         break;
       case "=":
       case "Enter":
+        if (operatorTwo === null) {
+          operatorTwo = Number(display.textContent);
+        }
         enterPressed();
         break;
     }
@@ -58,5 +65,44 @@ function keyPress(key) {
 function enterPressed() {
   if (operatorOne === null || operatorTwo === null || operation === "") {
     return;
+  }
+
+  switch (operation) {
+    case "+":
+      display.textContent = add();
+      break;
+    case "-":
+      display.textContent = subtract();
+      break;
+    case "*":
+      display.textContent = multiply();
+      break;
+    case "/":
+      display.textContent = divide();
+      break;
+  }
+
+  operatorOne = null;
+  operatorTwo = null;
+  operation = "";
+}
+
+function add() {
+  return operatorOne + operatorTwo;
+}
+
+function subtract() {
+  return operatorOne - operatorTwo;
+}
+
+function multiply() {
+  return operatorOne * operatorTwo;
+}
+
+function divide() {
+  if (operatorTwo == 0) {
+    return "ERROR!";
+  } else {
+    return operatorOne / operatorTwo;
   }
 }
