@@ -6,14 +6,13 @@ const operators = Array.from(document.querySelectorAll(".operator"));
 
 const numberArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 const operatorArray = ["+", "-", "*", "/"];
-const functionArray = [".", ",", "C", "c", "=", "Enter", "Backspace"];
+const functionArray = [".", ",", "C", "c", "AC", "=", "Enter", "Backspace"];
+
+let historyArray = [];
 
 let operatorPressedFLAG = false;
 let equalsPressedFLAG = false;
-
-let operatorOne = null;
-let operatorTwo = null;
-let operation = "";
+let screenResetFlag = false;
 
 window.addEventListener("keydown", (e) => keyPress(e.key));
 
@@ -29,6 +28,133 @@ function keyPress(key) {
   }
 }
 
+function numberPressed(number) {
+  if (historyArray.slice(-3).includes("=")) {
+    historyArray = [];
+  }
+  if (screenResetFlag) {
+    display.textContent = "";
+    screenResetFlag = false;
+  }
+  display.textContent += number;
+}
+
+function operatorPressed(operator) {
+  if (historyArray.length < 2 || (isOperatorLast() && !screenResetFlag)) {
+    historyArray.push(Number(display.textContent));
+  }
+  if (isOperatorLast()) {
+    historyArray.pop();
+    historyArray.push(operator);
+  } else {
+    historyArray.push(operator);
+  }
+  console.log(historyArray);
+  updateHistory();
+  screenResetFlag = true;
+}
+
+function functionPressed(key) {
+  switch (key) {
+    case ".":
+    case ",":
+      break;
+    case "c":
+    case "C":
+    case "AC":
+      break;
+    case "=":
+    case "Enter":
+      equalsPressed();
+      break;
+    case "Backspace":
+      break;
+  }
+}
+
+function equalsPressed() {
+  if (isOperatorLast()) {
+    historyArray.push(Number(display.textContent));
+  }
+  updateHistory();
+  let operatorOne = historyArray[historyArray.length - 3];
+  let operation = historyArray[historyArray.length - 2];
+  let operatorTwo = historyArray[historyArray.length - 1];
+  let result;
+  console.log(operatorOne, operation, operatorTwo);
+  switch (operation) {
+    case "+":
+      result = add(operatorOne, operatorTwo);
+      break;
+    case "-":
+      result = subtract(operatorOne, operatorTwo);
+      break;
+    case "*":
+      result = multiply(operatorOne, operatorTwo);
+      break;
+    case "/":
+      result = divide(operatorOne, operatorTwo);
+      break;
+    default:
+      break;
+  }
+
+  if (isNaN(result)) {
+    display.textContent = result;
+    historyArray.pop();
+    screenResetFlag = true;
+    return;
+  }
+  historyArray.push("=");
+  historyArray.push(result);
+  updateHistory();
+  display.textContent = result;
+  screenResetFlag = true;
+}
+
+function add(op1, op2) {
+  return op1 + op2;
+}
+
+function subtract(op1, op2) {
+  return op1 - op2;
+}
+
+function multiply(op1, op2) {
+  return op1 * op2;
+}
+
+function divide(op1, op2) {
+  if (op2 == 0) {
+    return "ERROR!";
+  } else {
+    return op1 / op2;
+  }
+}
+
+function isOperatorLast() {
+  let lastElement = historyArray[historyArray.length - 1];
+  console.log(lastElement);
+  if (
+    lastElement === "+" ||
+    lastElement === "-" ||
+    lastElement === "*" ||
+    lastElement === "/"
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function updateHistory() {
+  let hist = historyArray.join("");
+  if (hist.length > 16) {
+    history.textContent = "..." + hist.slice(-16);
+  } else {
+    history.textContent = hist;
+  }
+}
+/*
 function numberPressed(number) {
   if (operatorPressedFLAG || equalsPressedFLAG) {
     display.textContent = "";
@@ -130,7 +256,7 @@ function divide() {
   }
 }
 
-/*window.addEventListener("keydown", (e) => {
+window.addEventListener("keydown", (e) => {
   if (e.key === "Backspace") {
     console.log("bckspc");
   }
@@ -202,23 +328,5 @@ function enterPressed() {
   operation = "";
 }
 
-function add() {
-  return operatorOne + operatorTwo;
-}
 
-function subtract() {
-  return operatorOne - operatorTwo;
-}
-
-function multiply() {
-  return operatorOne * operatorTwo;
-}
-
-function divide() {
-  if (operatorTwo == 0) {
-    return "ERROR!";
-  } else {
-    return operatorOne / operatorTwo;
-  }
-}
 */
