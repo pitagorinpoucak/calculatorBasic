@@ -29,7 +29,7 @@ function keyPress(key) {
 }
 
 function numberPressed(number) {
-  if (historyArray.slice(-3).includes("=")) {
+  if (historyArray.slice(-2).includes("=")) {
     historyArray = [];
   }
   if (screenResetFlag) {
@@ -42,6 +42,10 @@ function numberPressed(number) {
 function operatorPressed(operator) {
   if (historyArray.length < 2 || (isOperatorLast() && !screenResetFlag)) {
     historyArray.push(Number(display.textContent));
+  }
+
+  if (!isNaN(lastElement())) {
+    equalsPressed();
   }
   if (isOperatorLast()) {
     historyArray.pop();
@@ -77,9 +81,16 @@ function equalsPressed() {
     historyArray.push(Number(display.textContent));
   }
   updateHistory();
+
+  if (historyArray.slice(-2).includes("=") || isNaN(lastElement())) {
+    if (isNaN(lastElement())) {
+      historyArray.pop();
+    }
+    return;
+  }
   let operatorOne = historyArray[historyArray.length - 3];
   let operation = historyArray[historyArray.length - 2];
-  let operatorTwo = historyArray[historyArray.length - 1];
+  let operatorTwo = lastElement();
   let result;
   console.log(operatorOne, operation, operatorTwo);
   switch (operation) {
@@ -132,15 +143,16 @@ function divide(op1, op2) {
   }
 }
 
+function lastElement() {
+  if (historyArray.length <= 1) {
+    return;
+  }
+  return historyArray[historyArray.length - 1];
+}
 function isOperatorLast() {
-  let lastElement = historyArray[historyArray.length - 1];
-  console.log(lastElement);
-  if (
-    lastElement === "+" ||
-    lastElement === "-" ||
-    lastElement === "*" ||
-    lastElement === "/"
-  ) {
+  let last = lastElement();
+  console.log(last);
+  if (last === "+" || last === "-" || last === "*" || last === "/") {
     return true;
   }
   return false;
