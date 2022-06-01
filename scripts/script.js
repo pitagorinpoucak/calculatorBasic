@@ -6,7 +6,19 @@ const operators = Array.from(document.querySelectorAll(".operator"));
 
 const numberArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 const operatorArray = ["+", "-", "*", "/"];
-const functionArray = [".", ",", "C", "c", "AC", "=", "Enter", "Backspace"];
+const functionArray = [
+  ".",
+  ",",
+  "C",
+  "c",
+  "AC",
+  "=",
+  "Enter",
+  "<-",
+  "Backspace",
+  "+/-",
+  "p",
+];
 
 let historyArray = [];
 
@@ -15,6 +27,12 @@ let equalsPressedFLAG = false;
 let screenResetFlag = false;
 
 window.addEventListener("keydown", (e) => keyPress(e.key));
+numbers.forEach((element) =>
+  element.addEventListener("click", (e) => keyPress(e.target.textContent))
+);
+operators.forEach((element) =>
+  element.addEventListener("click", (e) => keyPress(e.target.textContent))
+);
 
 function keyPress(key) {
   if (numberArray.includes(Number(key))) {
@@ -37,6 +55,12 @@ function numberPressed(number) {
     screenResetFlag = false;
   }
   display.textContent += number;
+  if (
+    display.textContent.startsWith("0") &&
+    !display.textContent.includes(".")
+  ) {
+    display.textContent = Number(display.textContent);
+  }
 }
 
 function operatorPressed(operator) {
@@ -62,18 +86,61 @@ function functionPressed(key) {
   switch (key) {
     case ".":
     case ",":
+      decimalPressed();
       break;
     case "c":
     case "C":
     case "AC":
+      allClearPressed();
       break;
     case "=":
     case "Enter":
       equalsPressed();
       break;
+    case "<-":
     case "Backspace":
+      backspacePressed();
+      break;
+    case "+/-":
+    case "p":
+      changePrefixPressed();
       break;
   }
+}
+
+function changePrefixPressed() {
+  let input = display.textContent;
+  input = Number(input) * -1;
+  display.textContent = input;
+}
+
+function allClearPressed() {
+  history.textContent = "";
+  display.textContent = "";
+  historyArray = [];
+  operatorPressedFLAG = false;
+  equalsPressedFLAG = false;
+  screenResetFlag = false;
+}
+
+function decimalPressed() {
+  if (display.textContent.includes(".") && !screenResetFlag) {
+    return;
+  }
+  if (display.textContent === "" || screenResetFlag) {
+    display.textContent = 0;
+  }
+  display.textContent += ".";
+  screenResetFlag = false;
+}
+
+function backspacePressed() {
+  let text = display.textContent.slice(0, display.textContent.length - 1);
+  if (text.length === 0 || Number(text) === 0) {
+    text = 0;
+    screenResetFlag = true;
+  }
+  display.textContent = text;
 }
 
 function equalsPressed() {
