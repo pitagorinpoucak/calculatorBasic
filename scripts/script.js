@@ -55,6 +55,9 @@ function numberPressed(number) {
     screenResetFlag = false;
   }
   display.textContent += number;
+  if (display.textContent.length >= 11) {
+    display.textContent = display.textContent.slice(-11);
+  }
   if (
     display.textContent.startsWith("0") &&
     !display.textContent.includes(".")
@@ -65,23 +68,29 @@ function numberPressed(number) {
 
 function operatorPressed(operator) {
   if (historyArray.length < 2 || (isOperatorLast() && !screenResetFlag)) {
-    historyArray.push(Number(display.textContent));
-  }
-
-  if (!isNaN(lastElement())) {
-    equalsPressed();
+    if (display.textContent.includes("Too big!")) {
+      historyArray = [];
+      historyArray.push(0);
+    } else {
+      historyArray.push(Number(display.textContent));
+    }
   }
   if (isOperatorLast()) {
     historyArray.pop();
     historyArray.push(operator);
+  } else if (lastElement() === undefined) {
+    historyArray.push(0);
+    historyArray.push(operator);
   } else {
     historyArray.push(operator);
+    console.log(historyArray);
+    updateHistory();
+    screenResetFlag = true;
   }
-  console.log(historyArray);
-  updateHistory();
-  screenResetFlag = true;
+  if (!isNaN(lastElement())) {
+    equalsPressed();
+  }
 }
-
 function functionPressed(key) {
   switch (key) {
     case ".":
@@ -110,17 +119,24 @@ function functionPressed(key) {
 
 function changePrefixPressed() {
   let input = display.textContent;
+  if (input === "" && screenResetFlag) {
+    display.textContent = "-";
+    screenResetFlag = false;
+    return;
+  }
   input = Number(input) * -1;
   display.textContent = input;
 }
 
 function allClearPressed() {
+  if (display.textContent !== "Too big!") {
+    display.textContent = "";
+  }
+  screenResetFlag = false;
   history.textContent = "";
-  display.textContent = "";
   historyArray = [];
   operatorPressedFLAG = false;
   equalsPressedFLAG = false;
-  screenResetFlag = false;
 }
 
 function decimalPressed() {
@@ -177,6 +193,15 @@ function equalsPressed() {
       break;
   }
 
+  if (result.toString().length >= 12) {
+    result = "Too big!";
+    display.textContent = result;
+    allClearPressed();
+    screenResetFlag = true;
+
+    return;
+  }
+
   if (isNaN(result)) {
     display.textContent = result;
     historyArray.pop();
@@ -211,7 +236,7 @@ function divide(op1, op2) {
 }
 
 function lastElement() {
-  if (historyArray.length <= 1) {
+  if (historyArray.length === 0) {
     return;
   }
   return historyArray[historyArray.length - 1];
@@ -233,179 +258,3 @@ function updateHistory() {
     history.textContent = hist;
   }
 }
-/*
-function numberPressed(number) {
-  if (operatorPressedFLAG || equalsPressedFLAG) {
-    display.textContent = "";
-    operatorPressedFLAG = false;
-    if (equalsPressedFLAG) {
-      equalsPressedFLAG = false;
-    }
-  }
-  display.textContent += number;
-}
-
-function operatorPressed(operator) {
-  operatorPressedFLAG = true;
-  if (operatorOne === null && !equalsPressedFLAG) {
-    operatorOne = Number(display.textContent);
-    operation = operator;
-    history.textContent += operatorOne;
-    history.textContent += operation;
-  } else {
-    if (operatorTwo === null && equalsPressedFLAG) {
-      operation = operator;
-      operatorTwo = Number(display.textContent);
-      history.textContent += operatorTwo;
-    } else {
-      equalsPressed();
-    }
-    //izračunati (pretisnuti =), prikazati rezultat, spremiti ga u operatorOne
-  }
-}
-
-function functionPressed(functionCode) {
-  switch (functionCode) {
-    case ".":
-    case ",":
-      break;
-    case "c":
-    case "C":
-    case "AC":
-      break;
-    case "=":
-    case "Enter":
-      equalsPressed();
-      break;
-    case "Backspace":
-      break;
-  }
-}
-
-function equalsPressed() {
-  let result = 0;
-
-  if (operatorTwo === null) {
-    operatorTwo = Number(display.textContent);
-    history.textContent += operatorTwo;
-  }
-
-  console.log(operatorOne, operation, operatorTwo);
-
-  switch (operation) {
-    case "+":
-      result = add();
-      break;
-    case "-":
-      result = subtract();
-      break;
-    case "*":
-      result = multiply();
-      break;
-    case "/":
-      result = divide();
-      break;
-  }
-
-  display.textContent = result;
-  history.textContent += "=";
-  history.textContent += result;
-  equalsPressedFLAG = true;
-  operatorPressedFLAG = false;
-  console.log(result);
-  operatorOne = result;
-  operatorTwo = null;
-  operation = "";
-}
-
-function add() {
-  return operatorOne + operatorTwo;
-}
-function subtract() {
-  return operatorOne - operatorTwo;
-}
-function multiply() {
-  return operatorOne * operatorTwo;
-}
-function divide() {
-  if (operatorTwo === 0) {
-    return "error";
-  } else {
-    return operatorOne / operatorTwo;
-  }
-}
-
-window.addEventListener("keydown", (e) => {
-  if (e.key === "Backspace") {
-    console.log("bckspc");
-  }
-});
-function keyPress(key) {
-  if (numberArray.includes(Number(key))) {
-    display.textContent += key;
-  }
-  
-  if (operatorArray.includes(key)) {
-    if (operatorOne !== null && operatorTwo !== null && operation !== "") {
-      enterPressed();
-      operatorOne = Number(display.textContent);
-    }
-    if (operatorOne === null) {
-      operatorOne = Number(display.textContent);
-      operation = key;
-      display.textContent = "";
-      return;
-    }
-    operatorTwo = Number(display.textContent);
-    display.textContent = "";
-  }
-
-  if (functionArray.includes(key)) {
-    switch (key) {
-      case ".":
-      case ",":
-        break;
-      case "C":
-      case "c":
-      case "AC":
-        break;
-      case "=":
-      case "Enter":
-        if (operatorTwo === null) {
-          operatorTwo = Number(display.textContent);
-        }
-        enterPressed();
-        break;
-    }
-  }
-
-  console.log(operatorOne, operation, operatorTwo);
-}
-
-function enterPressed() {
-  if (operatorOne === null || operatorTwo === null || operation === "") {
-    return;
-  }
-
-  switch (operation) {
-    case "+":
-      display.textContent = add();
-      break;
-    case "-":
-      display.textContent = subtract();
-      break;
-    case "*":
-      display.textContent = multiply();
-      break;
-    case "/":
-      display.textContent = divide();
-      break;
-  }
-
-  operatorOne = null;
-  operatorTwo = null;
-  operation = "";
-}
-
-
-*/
